@@ -26,7 +26,7 @@ def reorderList(self, head: Optional[ListNode]) -> None:
             prev.next = p1
             ptr, prev = p1, p2
 
-#143. Remove Nth Node From End of List
+#19. Remove Nth Node From End of List
 #Time: O(N), Space: O(1)
 #dummy node, 2 pointers
 def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
@@ -41,3 +41,14 @@ def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNod
             left = left.next
         left.next = left.next.next
         return dummy.next
+
+#141. Linked List Cycle
+#Time: O(N), Space: O(1)
+#Floyd's Tortoise & Hare, 2 pointers
+def hasCycle(self, head: Optional[ListNode]) -> bool:
+    slow, fast = head, head
+    while fast and fast.next:
+        slow, fast = slow.next, fast.next.next
+        if slow == fast:
+            return True
+    return False
