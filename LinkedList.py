@@ -28,3 +28,16 @@ def reorderList(self, head: Optional[ListNode]) -> None:
 
 #143. Remove Nth Node From End of List
 #Time: O(N), Space: O(1)
+#dummy node, 2 pointers
+def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        #1 pass
+        dummy = ListNode(0,head)
+        left, right = dummy, head
+        while n > 0:
+            right = right.next
+            n -= 1
+        while right:
+            right = right.next
+            left = left.next
+        left.next = left.next.next
+        return dummy.next
