@@ -105,6 +105,7 @@ def isSubtree(self, s, t):
 
 
 #235. Lowest Common Ancestor of a Binary Search Tree
+#Recursion
 #Time: O(N); Space: O(N), worset case skewed
 def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         parent_val = root.val
@@ -117,3 +118,26 @@ def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -
             return self.lowestCommonAncestor(root.left, p, q)
         else:
             return root
+
+
+#102. Binary Tree Level Order Traversal
+#Iteration
+#Time: O(N); Space: O(N), output N
+def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        fringe = collections.deque([root])
+        res = []
+        while fringe:
+            count = len(fringe)
+            level = []
+            out = False
+            for i in range(len(fringe)):
+                node = fringe.popleft()
+                level.append(node.val)
+                if node.left:
+                    fringe.append(node.left)
+                if node.right:
+                    fringe.append(node.right)
+            res.append(level)
+        return res
