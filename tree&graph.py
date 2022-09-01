@@ -62,3 +62,17 @@ def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
                 stack.append((node1.right, node2.right))
                 stack.append((node1.left, node2.left))
         return True
+
+
+#572. Subtree of Another Tree
+#Recursion
+#Time: O(S*T); Space: O(S+T)
+def isSubtree(self, s: Optional[TreeNode], t: Optional[TreeNode]) -> bool:
+    def dfs(s, t):
+        if not s and not t: return True
+        if not s or not t: return False
+        return s.val == t.val and dfs(s.left, t.left) and dfs(s.right, t.right)
+
+    if not s: return
+    if s.val == t.val and dfs(s, t): return True
+    return self.isSubtree(s.left, t) or self.isSubtree(s.right, t)
