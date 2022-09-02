@@ -122,7 +122,7 @@ def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -
 
 #102. Binary Tree Level Order Traversal
 #Iteration
-#Time: O(N); Space: O(N), output N
+#Time: O(N); Space: O(N), max # of leaf node is (n+1)/2 on last level if full
 def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root:
             return []
@@ -141,3 +141,93 @@ def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
                     fringe.append(node.right)
             res.append(level)
         return res
+#Recursive
+def levelOrder(self, root):
+        levels = []
+        if not root:
+            return levels
+        
+        def helper(node, level):
+            if len(levels) == level:
+                levels.append([])
+
+            levels[level].append(node.val)
+
+            if node.left:
+                helper(node.left, level + 1)
+            if node.right:
+                helper(node.right, level + 1)
+            
+        helper(root, 0)
+        return levels
+
+
+#98. Validate Binary Search Tree
+#Iterative Inorder Traversal
+#Time: O(N); Space: O(N)
+def isValidBST(self, root: Optional[TreeNode]) -> bool:
+    if not root:
+        return True
+    stack = []
+    ptr = root
+    prev = -float('inf')
+    while stack or ptr:
+        while ptr:
+            stack.append(ptr)
+            ptr = ptr.left
+        ptr = stack.pop()
+        if ptr.val <= prev:
+            return False
+        prev = ptr.val
+        ptr = ptr.right
+    return True
+#Recursive inorder traversal
+def isValidBST(self, root: TreeNode) -> bool:
+    def inorder(root):
+        if not root:
+            return True
+        if not inorder(root.left):
+            return False
+        if root.val <= self.prev:
+            return False
+        self.prev = root.val
+        return inorder(root.right)
+    self.prev = -math.inf
+    return inorder(root)
+#Recursion with valid range
+def isValidBST(self, root: TreeNode) -> bool:
+    def validate(node, low=-math.inf, high=math.inf):
+        if not node:
+            return True
+        if node.val <= low or node.val >= high:
+            return False
+        return (validate(node.right, node.val, high) and
+                validate(node.left, low, node.val))
+    return validate(root)
+
+
+#230. Kth Smallest Element in a BST
+#Iterative DFS Inorder Traversal
+#Time: O(N), Space: O(N)
+def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+    count = 0
+    ptr = root
+    fringe = collections.deque()
+    while ptr or fringe:
+        while ptr:
+            fringe.append(ptr)
+            ptr = ptr.left
+            
+        ptr = fringe.pop() 
+        count += 1
+        if count == k:
+            break
+        ptr = ptr.right
+    return ptr.val
+#Recursive Inorder
+def kthSmallest(self, root, k):
+    def inorder(r):
+        return inorder(r.left) + [r.val] + inorder(r.right) if r else []
+
+    return inorder(root)[k - 1]
+ 
