@@ -275,3 +275,49 @@ def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNod
     return root
 
 
+
+#Graphs
+#133. Clone Graph
+#DFS Iteration
+#Time: O(N+M); Space: O(N)
+def cloneGraph(self, node: 'Node') -> 'Node':
+        #null case
+        if not node:
+            return None
+        
+        #DFS
+        ptr = node
+        fringe = collections.deque([ptr])
+        mp = {}
+        mp[ptr.val] = Node(ptr.val)
+        
+        while fringe:
+            ptr = fringe.pop()
+            for nb in ptr.neighbors:
+                if nb.val not in mp:
+                    mp[nb.val] = Node(nb.val)
+                    fringe.append(nb)
+                mp[ptr.val].neighbors.append(mp[nb.val])
+                    
+        return mp[node.val]
+
+#Recursion
+def __init__(self):
+        self.visited = {}
+
+def cloneGraph(self, node):
+    if not node:
+        return node
+
+    if node in self.visited:
+        return self.visited[node]
+    
+    clone_node = Node(node.val, [])
+    self.visited[node] = clone_node
+    
+    if node.neighbors:
+        clone_node.neighbors = [self.cloneGraph(n) for n in node.neighbors]
+    return clone_node
+                    
+
+
