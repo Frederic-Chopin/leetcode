@@ -390,3 +390,55 @@ def pacificAtlantic(self, matrix: List[List[int]]) -> List[List[int]]:
 
     return list(pacific_reachable.intersection(atlantic_reachable))
 
+
+
+#323. Number of Connected Components in an Undirected Graph
+#Union Find using disjoint set
+#Time: O(E*a(n)) < O(n*logn), a(n): inverse Ackermann function; Space: O(V)
+def countComponents(self, n: int, edges: List[List[int]]) -> int:
+    parents = [i for i in range(n)]
+    rank = [1] * n
+
+    def find(n1):
+        res = n1
+        while res != parents[res]:
+            parents[res] = parents[parents[res]]
+            res = parents[res]
+        return res
+
+    def union(n1, n2):
+        p1, p2 = find(n1), find(n2)
+        if p1 == p2: return 0
+        if rank[p2] > rank[p1]:
+            parents[p1] = p2
+            rank[p2] += rank[p1]
+        else:
+            parents[p2] = p1
+            rank[p1] += rank[p2]
+        return 1
+
+    res = n
+    for n1, n2 in edges:
+        res -= union(n1, n2)
+    return res
+
+#DFS
+#Time: O(E+V); Space: O(E+V)
+def countComponents(self, n: int, edges: List[List[int]]) -> int:
+    graph = collections.defaultdict(list)
+    for x, y in edges:
+        graph[x].append(y)
+        graph[y].append(x)
+    
+    def dfs(node, seen):
+        seen.add(node)
+        for neighbor in graph[node]:
+            if neighbor not in seen:
+                dfs(neighbor, seen)
+    count = 0
+    seen = set()
+    for node in range(n):
+        if node not in seen:
+            dfs(node, seen)
+            count += 1
+    return count
