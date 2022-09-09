@@ -442,3 +442,79 @@ def countComponents(self, n: int, edges: List[List[int]]) -> int:
             dfs(node, seen)
             count += 1
     return count
+
+
+
+#261. Graph Valid Tree
+#DFS, Recursion
+#Time: O(V+E); Space: O(V+E)
+def validTree(self, n: int, edges: List[List[int]]) -> bool:
+    if len(edges) != n - 1: return False
+    
+    adj_list = [[] for _ in range(n)]
+    for A, B in edges:
+        adj_list[A].append(B)
+        adj_list[B].append(A)
+    
+    parent = {0: -1}
+    stack = [0]
+    
+    while stack:
+        node = stack.pop()
+        for neighbour in adj_list[node]:
+            if neighbour == parent[node]:
+                continue
+            if neighbour in parent:
+                return False
+            parent[neighbour] = node
+            stack.append(neighbour)
+    
+    return len(parent) == n
+
+#DFS, Recursion
+def validTree(self, n: int, edges: List[List[int]]) -> bool:
+    if len(edges) != n - 1: return False
+
+    adj_list = [[] for _ in range(n)]
+    for A, B in edges:
+        adj_list[A].append(B)
+        adj_list[B].append(A)
+    
+    seen = set()
+    
+    def dfs(node, parent):
+        if node in seen: return
+        seen.add(node)
+        for neighbour in adj_list[node]:
+            if neighbour == parent:
+                continue
+            if neighbour in seen:
+                return False
+            result = dfs(neighbour, node)
+            if not result: return False
+        return True
+    
+    return dfs(0, -1) and len(seen) == n
+
+#Use the fact that tree must have n-1 edges
+#Time: O(V); Space: O(V)
+def validTree(self, n: int, edges: List[List[int]]) -> bool:
+    if len(edges) != n - 1: return False
+
+    adj_list = [[] for _ in range(n)]
+    for A, B in edges:
+        adj_list[A].append(B)
+        adj_list[B].append(A)
+
+    seen = {0}
+    stack = [0]
+    
+    while stack:
+        node = stack.pop()
+        for neighbour in adj_list[node]:
+            if neighbour in seen:
+                continue
+            seen.add(neighbour)
+            stack.append(neighbour)
+    
+    return len(seen) == n
