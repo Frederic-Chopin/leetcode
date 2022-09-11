@@ -276,6 +276,35 @@ def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNod
 
 
 
+#113. Path Sum II
+#Recursive DFS, backtracking
+#Time: O(N*2), need to copy array; Space: O(N)
+def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+    def helper(node, targetSum, array, curr_sum):
+        # check null root
+        if not node:
+            return 
+        
+        nonlocal res
+        array.append(node.val)
+        curr_sum += node.val
+        
+        #reaches leaf node
+        if not node.left and not node.right and curr_sum == targetSum:
+            res.append(list(array))             #need to append a copy
+        else:
+            helper(node.left, targetSum, array, curr_sum)
+            helper(node.right, targetSum, array, curr_sum)
+        array.pop()
+    
+    res = []
+    helper(root, targetSum, [], 0)
+    
+    return res
+
+
+
+
 #Graphs
 #133. Clone Graph
 #DFS Iteration
@@ -518,3 +547,5 @@ def validTree(self, n: int, edges: List[List[int]]) -> bool:
             stack.append(neighbour)
     
     return len(seen) == n
+
+
